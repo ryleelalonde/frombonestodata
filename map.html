@@ -1,84 +1,68 @@
 <!DOCTYPE html>
-<html lang="em">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Relevant Publications</title>
-          <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        /* Set the size of the map */
-        #map {
-            width: 100%;
-            height: 100%;
-            position: absolute; 
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-        }
-        .timeline-container {
-            position: absolute;
-            top: 85%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            z-index: 1000;
-        }
 
-        .timeline-container input {
-            width: 100%;
-        }
-    </style>
-     <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Walk Down Memory Lane</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link href="styles.css" rel="stylesheet" />
+    
+    <!--Leaflet-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"></script>
+
+    <!-- Time Slider -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
 </head>
 <body>
-     <!-- Bootstrap JS dependencies -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-     <!-- Timeline Slider -->
-     <div class="timeline-container">
-        <label for="yearSlider">Select Year: <span id="selectedYear">1868</span></label>
-        <input type="range" id="yearSlider" min="1868" max="1975" value="1868" step="1">
-    </div>
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    // Initialize the map and set its view to the chosen geographical coordinates and zoom level
-    var map = L.map('map').setView([47.610805, -88.219135], 7); // Coordinates set to Lake Superior by default
+    <!--Navigation-->
+    
+    <!-- Your map container -->
+    <div id="map" style="height: 600px;"></div>
 
-    // Trigger modal on map load
-    map.whenReady(function() {
-    $('#overlay').modal('show');  // This shows the popup once the map is fully ready. I use whenReady instead of OnLoad here 
-});
-    // GeoJSON dataset
-    var dataset1 = [
-    {
-            type: 'Feature',
-            geometry: {
-                type: 'Point',
-                coordinates: [-84.95258, 46.76947]
-            },
-            properties: {
-                title: 'Jupiter',
-                description: '<b>Type of vessel:</b> wooden schooner barge <br></br> Ran aground and sunk with 6 aboard during a winter storm. The <i>Jupiter</i> was on a towline with her sister ship <i>Saturn</i> and the steamer <i> John A Dix</i> during a storm. The towline separated from the <i>Dix</i>, which survived. Both the <i>Jupiter</i> and the <i>Saturn</i> were lost with all their crew and cargo. Recovery efforts were discontinued in May, 1873. Captain Peter Howard was the only named victim. <a href="https://images.maritimehistoryofthegreatlakes.ca/53828/data" target="_blank">Learn more</a>',
-                time: '1872/11/27',
-                image: 'Images/Jupiter-Saturn_Shipwrecks_CHI24.png', // Replace with your image URL
-         
-                icon: {
-                    iconUrl: 'Images/barge.png', // Authorship to Flat Icon for all icons
-                    iconSize: [40, 40],
-                iconAnchor: [3, 35],
-                popupAnchor: [0, -41],
-                className: 'dot',
-                }
+    <!-- Time slider -->
+    <div id="time-slider"></div>
+
+    <!-- Your custom script to initialize map and time slider -->
+    <script>
+        // Initialize map centered on the United States
+        const map = L.map('map').setView([37.0902, -95.7129], 4); // Centered on US, zoomed out a bit
+
+        // Add a tile layer to the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Initialize Marker Cluster
+        const markers = L.markerClusterGroup();
+
+        // Add sample markers (add your own logic to load data here)
+        L.marker([51.5, -0.09]).bindPopup('Sample Marker 1').addTo(markers);
+        L.marker([51.51, -0.1]).bindPopup('Sample Marker 2').addTo(markers);
+
+        // Add markers to map
+        map.addLayer(markers);
+
+        // Initialize Time Slider
+        const slider = document.getElementById('time-slider');
+        noUiSlider.create(slider, {
+            start: [10],
+            range: {
+                'min': [0],
+                'max': [100]
             }
-        }, ]
-// </script>
+        });
+
+        // Add event listener for time slider (update map, markers, etc.)
+        slider.noUiSlider.on('update', function (values, handle) {
+            console.log('Slider value: ', values[handle]);
+            // Implement logic to update map based on time slider (e.g., filter markers by time)
+        });
+    </script>
 </body>
 </html>
