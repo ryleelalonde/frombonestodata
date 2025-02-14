@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Walk Down Memory Lane</title>
+    <title>From Bones to Data</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <link href="styles.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
     
     <!--Leaflet-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
@@ -14,6 +13,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"></script>
+    
+        <!-- Other links and stylesheets -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Time Slider -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
@@ -32,8 +35,10 @@
             width: 80%;
             z-index: 1000;
         }
+
     </style>
 </head>
+
 <body>
     <!--Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
@@ -63,17 +68,16 @@
               </div>
           </div>
       </nav>
-    <!-- Your map container -->
-    <div id="map" style="height: 600px;"></div>
-
-    <!-- Time slider -->
+    <!-- Slider container -->
+    <div id="map" style="margin-top: 50px;"></div>
+    <div id="slider-container">
     <div id="time-slider"></div>
-
+    </div>
     <!-- Your custom script to initialize map and time slider -->
     <script>
         // Initialize map centered on the United States
         const map = L.map('map').setView([37.0902, -95.7129], 4); // Centered on US, zoomed out a bit
-
+       
         // Add a tile layer to the map
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
