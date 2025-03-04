@@ -36,6 +36,14 @@
             z-index: 1000;
         }
 
+        #date-stamp {
+            position: absolute;
+            bottom: 60px;
+            left: 10%;
+            font-size: 18px;
+            color: white;
+            z-index: 1001;
+        }
     </style>
 </head>
 
@@ -73,6 +81,8 @@
     <div id="slider-container">
     <div id="time-slider"></div>
     </div>
+     <!-- Date stamp display -->
+     <div id="date-stamp"></div>
     <!-- Your custom script to initialize map and time slider -->
     <script>
         // Initialize map centered on the United States
@@ -100,13 +110,21 @@
             range: {
                 'min': [0],
                 'max': [100]
-            }
+            },
+            step: 1
         });
 
-        // Add event listener for time slider (update map, markers, etc.)
+        // Date mapping function (adjust this based on your actual range and desired dates)
+        function getDateFromSliderValue(value) {
+            const baseYear = 2000; // Example: set the base year
+            const mappedYear = baseYear + value; // Map slider value to a year
+            return `${mappedYear}-01-01`; // Return the date (can be adjusted to include months, etc.)
+        }
+
+        // Update the date stamp when the slider value changes
         slider.noUiSlider.on('update', function (values, handle) {
-            console.log('Slider value: ', values[handle]);
-            // Implement logic to update map based on time slider (e.g., filter markers by time)
+            const date = getDateFromSliderValue(values[handle]); // Get date for the current slider value
+            dateStamp.innerHTML = `Selected Date: ${date}`; // Update the date display
         });
     </script>
 </body>
