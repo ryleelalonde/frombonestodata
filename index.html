@@ -11,6 +11,8 @@
         <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
         <!-- Stylesheet-->
         <link href="style.css" rel="stylesheet"/>
+        <!-- Bootstrap CSS-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             /* Custom CSS */
             body {
@@ -130,35 +132,58 @@
                 width: 50px;
                 margin: 20px auto;
             }
+
+            .partner-card {
+                 border: 1px solid #ddd; 
+                 padding: 20px;
+                 text-align: center;
+                background-color: #f9f9f9; 
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }   
+
+            .partner-img {
+                 width: 100%;  
+                 height: auto; 
+                 object-fit: contain; 
+                max-height: none; 
+            }
+
+            .partner-link {
+                text-decoration: none; 
+                color: #000;
+
+            }
         </style>
     </head>
     <body id="page-top">
-        <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-            <div class="container px-5">
-                <a class="navbar-brand" href="#page-top">From Bones to Data</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="index.html">About</a></li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="model.html" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Models</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="humerus.html">Humerus</a></li>
-                                <li><a class="dropdown-item" href="radius.html">Radius</a></li>
-                                <li><a class="dropdown-item" href="ulna.html">Ulna</a></li>
-                                <li><a class="dropdown-item" href="oscoxae.html">Os Coxae</a></li>
-                                <li><a class="dropdown-item" href="femur.html">Femur</a></li>
-                                <li><a class="dropdown-item" href="tibia.html">Tibia</a></li>
-                            </ul>
+     <!--Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <div class="container px-5">
+            <a class="navbar-brand" href="#page-top"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">About</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="model.html" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Models
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="humerus.html">Humerus</a></li>
+                            <li><a class="dropdown-item" href="radius.html">Radius</a></li>
+                            <li><a class="dropdown-item" href="ulna.html">Ulna</a></li>
+                            <li><a class="dropdown-item" href="oscoxae.html">Os Coxae</a></li>
+                            <li><a class="dropdown-item" href="femur.html">Femur</a></li>
+                            <li><a class="dropdown-item" href="tibia.html">Tibia</a></li>
+                          </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="reference.html">References</a></li>
-                        <li class="nav-item"><a class="nav-link" href="map.html">Map</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
+                          </li>
+                      <li class="nav-item"><a class="nav-link" href="reference.html">References</a></li>
+                      <li class="nav-item"><a class="nav-link" href="map.html">Map</a></li>
+                  </ul>
+              </div>
+          </div>
+      </nav> 
         <!-- Header -->
         <header>
             <div class="text-center">
@@ -182,61 +207,71 @@
         <!-- Services Section -->
         <section class="section-content">
             <div class="container px-5">
-                <div class="row gx-5">
-                    <div class="col-lg-4 col-md-6">
-                        <a href="reference.html" class="text-decoration-none"></a>
-                        <div class="service-card">
-                            <i class="bi-gem fs-1 text-primary"></i>
-                            <h3 class="h4 mb-2">Research Papers</h3>
-                            <img src="images/research.png" alt="Research Papers">
-                        </div>
+                <div class="row gx-5 justify-content-between"> 
+                    <div class="col-lg-4 col-md-4 col-12 mb-4"> 
+                        <a href="reference.html" class="text-decoration-none">
+                            <div class="service-card">
+                                <i class="bi-gem fs-1 text-primary"></i>
+                                <h3 class="h4 mb-2">Research Papers</h3>
+                                <img src="images/research.png" alt="Research Papers">
+                            </div>
+                        </a>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <a href="map.html" class="text-decoration-none"></a>
-                        <div class="service-card">
-                            <i class="bi-globe fs-1 text-primary"></i>
-                            <h3 class="h4 mb-2">Map of Research</h3>
-                            <img src="images/location.png" alt="Map of Research">
-                        </div>
+                    <div class="col-lg-4 col-md-4 col-12 mb-4">
+                        <a href="map.html" class="text-decoration-none">
+                            <div class="service-card">
+                                <i class="bi-globe fs-1 text-primary"></i>
+                                <h3 class="h4 mb-2">Map of Research</h3>
+                                <img src="images/location.png" alt="Map of Research">
+                            </div>
+                        </a>
                     </div>
-                    <div class="col-lg-4 col-md-6">
-                        <a href="model.html" class="text-decoration-none"></a>
-                        <div class="service-card">
-                            <i class="bi-laptop fs-1 text-primary"></i>
-                            <h3 class="h4 mb-2">Practice</h3>
-                            <img src="images/practice.png" alt="Practice">
-                        </div>
+                    <div class="col-lg-4 col-md-4 col-12 mb-4">
+                        <a href="model.html" class="text-decoration-none">
+                            <div class="service-card">
+                                <i class="bi-laptop fs-1 text-primary"></i>
+                                <h3 class="h4 mb-2">Practice</h3>
+                                <img src="images/practice.png" alt="Practice">
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </section>        
+<!-- Partners Section -->
+<section class="section-content">
+    <div class="container px-5">
+        <h2 class="section-title text-center">Our Partners</h2>
+        <div class="row gx-5 justify-content-between"> 
+            <div class="col-lg-4 col-md-4 col-12 mb-4"> 
+                <a href="http://leadr.msu.edu/" class="partner-link"> 
+                    <div class="partner-card">
+                        <h3 class="h4 mb-2">LEADR</h3>
+                        <img src="images/grleadrtransparent.png" alt="LEADR" class="partner-img">
+                    </div>
+                </a>
+            </div>
 
-        <!-- Partners Section -->
-        <section class="section-content">
-            <div class="container px-5">
-                <h2 class="section-title text-center">Our Partners</h2>
-                <div class="row gx-5">
-                    <div class="col-lg-4 col-md-6 text-center">
-                        <div class="partner-card">
-                            <h3 class="h4 mb-2">LEADR</h3>
-                            <img src="images/grleadrtransparent.png" alt="LEADR">
-                        </div>
+            <div class="col-lg-4 col-md-4 col-12 mb-4">
+                <a href="https://chi.anthropology.msu.edu/" class="partner-link"> 
+                    <div class="partner-card">
+                        <h3 class="h4 mb-2">Cultural Heritage Informatics</h3>
+                        <img src="images/CHI.png" alt="Cultural Heritage Informatics" class="partner-img">
                     </div>
-                    <div class="col-lg-4 col-md-6 text-center">
-                        <div class="partner-card">
-                            <h3 class="h4 mb-2">Cultural Heritage Informatics</h3>
-                            <img src="images/CHI.png" alt="Cultural Heritage Informatics">
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6 text-center">
-                        <div class="partner-card">
-                            <h3 class="h4 mb-2">Aubree Marshall</h3>
-                            <img src="images/Aubree.png" alt="Aubree Marshall">
-                        </div>
-                    </div>
-                </div>
+                </a>
             </div>
-        </section>
+
+            <div class="col-lg-4 col-md-4 col-12 mb-4">
+                <a href="https://www.aubreemarshall.com/" class="partner-link"> 
+                    <div class="partner-card">
+                        <h3 class="h4 mb-2">Aubree Marshall</h3>
+                        <img src="images/Aubree.png" alt="Aubree Marshall" class="partner-img">
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Contact Section (add this at the bottom) -->
 <section class="page-section" id="contact">
     <div class="container px-4 px-lg-5">
@@ -279,3 +314,10 @@
         <footer>
             <div class="container px-5">
                 <p class="m-0 text-right text-white small">Copyright &copy; From Bones to Data, 2025</p>
+</div>
+</footer>
+<!-- Bootstrap JS + Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
