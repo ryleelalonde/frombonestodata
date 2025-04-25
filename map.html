@@ -97,27 +97,23 @@
         const markers = L.markerClusterGroup();
 
         // Add sample markers (add your own logic to load data here)
-        L.marker([35.9544, -83,9295]).bindPopup('University of Tennessee, Knoxville').addTo(markers);
-        L.marker([30.2850, -97.7335]).bindPopup('University of Texas, Austin').addTo(markers);
-        L.marker([33.659355, -111.956432]).bindPopup('Mayo Clinic School of Medicine- Arizona Campus').addTo(markers);
-        L.marker([35.9544, -83.9295]).bindPopup('University of Tennessee- Knoxville').addTo(markers);
-        L.marker([39.4858, -80.1630]).bindPopup('Fairmont State University').addTo(markers); 
-        L.marker([38.9072,-77.0369]).bindPopup('Supreme Court-Washington, D.C.').addTo(markers); 
-        L.marker([35.0908, -106.6210]).bindPopup('University of New Mexico, Albuquerque').addTo(markers);
+        var marker= L.marker([35.9544, -83,9295]).addTo(map);
+        marker.bindPopup("<b>University of Tennessee, Knoxville</b><br>Data Collection Procedures for Forensic Skeletal Material 2.0</br><br>This is a data collection procedures manual from the Forensic Anthropology Center from The University of Tennessee, Knoxville.</br><br> Provides the basis for standards to determine age, sex, ancestry, and strautre of unknown remains.</br>").openPopup();
+        var marker= L.marker([30.2850, -97.7335]).addTo(map);
+        marker.bindPopup("<b>University of Texas, Austin</b><br>eForensics</br><br>An interactive online world to practice forensic anthropology techniques designed by the University of Texas").openPopup();
+        var marker= L.marker([33.659355, -111.956432]).addTo(map);
+        marker.bindPopup("<b>Mayo Clinic School of Medicine- Arizona Campus</b><br>Error quantification of osteometric data in forensic anthropology</br><br>A study analyzing the reliability of osteometric data used in forensic cases, specifically references UTK <i>Data Collection Procedures 2.0</i></br><br>https://doi.org/10.1016/j.forsciint.2018.04.004</br>").openPopup();
+        var marker= L.marker([35.9544, -83.9295]).addTo(map);
+        marker.bindPopup("<b>University of Tennessee- Knoxville</b><br>Should We Estimate Biological or Forensic Stature?</br><br> This paper discusses the Trotter and Gleser stature regression equation, partly incorrect, have been applied to estimate forensic stature.</br>").openPopup();
+        var marker= L.marker([39.4858, -80.1630]).addTo(markers)
+        marker.bindPopup("<b>Fairmont State University</b><br>Intraobserver and Interobserver Error in Osteological Analysis as an Indicator for Non-Expert Skeletal Analysis</br><br>This study focuses on the intra- and inter- observer reliability in the assessment of human remains.</br>").openPopup(); 
+        var marker= L.marker([38.9072,-77.0369]).addTo(markers);
+        marker.bindPopup("<b>Supreme Court-Washington, D.C.</b><br>Daubert v. Merrel Dow Pharmaceutical (1993)</br><br>Pivotal case that determined the standards for expert witness testimony.</br>").openPopup(); 
+        var marker= L.marker([35.0908, -106.6210]).addTo(map);
+        marker.bindPopup("<b>University of New Mexico, Albuquerque</b><br>Technical note: Measureing bicondylar length in computer tomography data</br><br>With the increase of generated-images of human remains in research, this work presents protocols for measuring femoral bicondylar length.</br><br>https://doi.org/10.1002/ajpa.25032</br>").openPopup();
 
         // Add markers to map
         map.addLayer(markers);
-
-        // Initialize Time Slider
-        const slider = document.getElementById('time-slider');
-        noUiSlider.create(slider, {
-            start: [10],
-            range: {
-                'min': [0],
-                'max': [100]
-            },
-            step: 1
-        });
 
         // Date mapping function (adjust this based on your actual range and desired dates)
         function getDateFromSliderValue(value) {
