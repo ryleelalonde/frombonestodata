@@ -11,6 +11,70 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
     <!-- Bootstrap CSS-->
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+   <!--Sketchfab Viewer API-->
+   <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.0.js"></script>
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const viewerDiv = document.getElementById('sketchfab-viewer');
+        const client = new Sketchfab('1.12.0', viewerDiv);
+        const modelUid = 'a1095b28cdb64a6b979dc18c7410be4b';
+    
+        let api;
+        let clickCount = 0;
+        let points = [];
+    
+        client.init(modelUid, {
+            success: function(viewerApi) {
+                api = viewerApi;
+                api.start();
+    
+                api.addEventListener('viewerready', function() {
+                    console.log('Viewer ready');
+    
+                    viewerDiv.addEventListener('click', function(event) {
+                        const rect = viewerDiv.getBoundingClientRect();
+                        const x = ((event.clientX - rect.left) / rect.width);
+                        const y = ((event.clientY - rect.top) / rect.height);
+    
+                        api.pickColor(x, y, function(result) {
+                            if (result && result.position) {
+                                points.push(result.position);
+                                clickCount++;
+    
+                                // Create marker
+                                api.createAnnotation({
+                                    position: result.position,
+                                    title: `Point ${clickCount}`,
+                                    content: '',
+                                    pinned: true
+                                }, function(index) {
+                                    console.log(`Annotation ${index} created`);
+                                });
+    
+                                if (clickCount === 2) {
+                                    const [p1, p2] = points;
+                                    const dx = p2[0] - p1[0];
+                                    const dy = p2[1] - p1[1];
+                                    const dz = p2[2] - p1[2];
+                                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    
+                                    document.getElementById('measurement-result').textContent =
+                                        `Distance: ${distance.toFixed(2)} units`;
+    
+                                    points = [];
+                                    clickCount = 0;
+                                }
+                            }
+                        });
+                    });
+                });
+            },
+            error: function() {
+                console.error('Sketchfab Viewer failed to load.');
+            }
+        });
+    });
+    </script>    
     <!-- Stylesheet-->
     <link href="style.css" rel="stylesheet"/>
 </head>
@@ -35,7 +99,6 @@
                         <li><a class="dropdown-item" href="radius.html">Radius</a></li>
                         <li><a class="dropdown-item" href="ulna.html">Ulna</a></li>
                         <li><a class="dropdown-item" href="oscoxae.html">Os Coxae</a></li>
-                        <li><a class="dropdown-item" href="femur.html">Femur</a></li>
                         <li><a class="dropdown-item" href="tibia.html">Tibia</a></li>
                     </ul>
                 </li>
@@ -52,8 +115,9 @@
         <div class="col-md-8 main-content" style="padding: 20px;">
             <h1>Humerus</h1>
             <p>Put your main page content here.</p>
-            <div class="sketchfab-embed-wrapper"> <iframe title="Humerus" width="100%" height="600px" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/a1095b28cdb64a6b979dc18c7410be4b/embed"> </iframe> <p style="font-size: 13px; font-weight: normal; margin: 5px; color: #4A4A4A;"> <a href="https://sketchfab.com/3d-models/humerus-a1095b28cdb64a6b979dc18c7410be4b?utm_medium=embed&utm_campaign=share-popup&utm_content=a1095b28cdb64a6b979dc18c7410be4b" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> Humerus </a> by <a href="https://sketchfab.com/rylalond?utm_medium=embed&utm_campaign=share-popup&utm_content=a1095b28cdb64a6b979dc18c7410be4b" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;"> rylalond </a> on <a href="https://sketchfab.com?utm_medium=embed&utm_campaign=share-popup&utm_content=a1095b28cdb64a6b979dc18c7410be4b" target="_blank" rel="nofollow" style="font-weight: bold; color: #1CAAD9;">Sketchfab</a></p></div>
-        </div>
+            <div id="sketchfab-viewer" style="width: 100%; height: 600px;"></div>
+<p id="measurement-result" style="font-size: 14px; margin-top: 10px; font-weight: bold;"></p>
+            </div>
         <!-- Sidebar -->
         <div class="col-md-4 sidebar" style="background-color: #f4f4f4; padding: 20px;">
             <h3>Measurements</h3>
