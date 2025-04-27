@@ -10,77 +10,12 @@
     <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
     <!-- Bootstrap CSS-->
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-   <!--Sketchfab Viewer API-->
-   <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.0.js"></script>
-   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const viewerDiv = document.getElementById('sketchfab-viewer');
-        const client = new Sketchfab('1.12.0', viewerDiv);
-        const modelUid = 'a1095b28cdb64a6b979dc18c7410be4b';
-    
-        let api;
-        let clickCount = 0;
-        let points = [];
-    
-        client.init(modelUid, {
-            success: function(viewerApi) {
-                api = viewerApi;
-                api.start();
-    
-                api.addEventListener('viewerready', function() {
-                    console.log('Viewer ready');
-    
-                    viewerDiv.addEventListener('click', function(event) {
-                        const rect = viewerDiv.getBoundingClientRect();
-                        const x = ((event.clientX - rect.left) / rect.width);
-                        const y = ((event.clientY - rect.top) / rect.height);
-    
-                        api.pickColor(x, y, function(result) {
-                            if (result && result.position) {
-                                points.push(result.position);
-                                clickCount++;
-    
-                                // Create marker
-                                api.createAnnotation({
-                                    position: result.position,
-                                    title: `Point ${clickCount}`,
-                                    content: '',
-                                    pinned: true
-                                }, function(index) {
-                                    console.log(`Annotation ${index} created`);
-                                });
-    
-                                if (clickCount === 2) {
-                                    const [p1, p2] = points;
-                                    const dx = p2[0] - p1[0];
-                                    const dy = p2[1] - p1[1];
-                                    const dz = p2[2] - p1[2];
-                                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-    
-                                    document.getElementById('measurement-result').textContent =
-                                        `Distance: ${distance.toFixed(2)} units`;
-    
-                                    points = [];
-                                    clickCount = 0;
-                                }
-                            }
-                        });
-                    });
-                });
-            },
-            error: function() {
-                console.error('Sketchfab Viewer failed to load.');
-            }
-        });
-    });
-    </script>    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Stylesheet-->
     <link href="style.css" rel="stylesheet"/>
 </head>
 <body id="page-top">
 <!-- Navigation -->
-<!--Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container px-5">
         <a class="navbar-brand" href="#page-top"></a>
@@ -108,25 +43,96 @@
         </div>
     </div>
 </nav>    
+
 <!-- Content Layout with Sidebar -->
 <div class="container" style="padding-top: 80px;"> <!-- Add padding-top to offset the fixed navbar -->
     <div class="row" style="min-height: 100vh;">
         <!-- Main Content -->
         <div class="col-md-8 main-content" style="padding: 20px;">
             <h1>Humerus</h1>
-            <p>Put your main page content here.</p>
-            <div id="sketchfab-viewer" style="width: 100%; height: 600px;"></div>
-<p id="measurement-result" style="font-size: 14px; margin-top: 10px; font-weight: bold;"></p>
-            </div>
+            <p>Below you will find the bone model. The orbit control allows you to move the bone around as if you were holding it. Clicking on two points on the bone will allow you practice measurements- you can consult measurements to the right for the exact location to take measurements.</p>
+            
+            <!-- Sketchfab Model -->
+            <div id="model-viewer"></div>
+            <p id="measurement-result" style="font-size: 14px; margin-top: 10px; font-weight: bold;"></p>
+        </div>
+
         <!-- Sidebar -->
         <div class="col-md-4 sidebar" style="background-color: #f4f4f4; padding: 20px;">
             <h3>Measurements</h3>
-            <p><i>Humerus: Maximum Length:</i> most superior point on the head of the humerus to the most inferior point on the trochlea. <br><i>Instrument: osteometric board</i></br> <br><i>Humerus: Epicondular Breadth:</i> the distal end, the most laterally protruding point on the lateral epicondyle to the medially protruding point of the medial epicondule. <i>Instrument: osteometric board</i></br> <br><i>Humerus: Vertical Diameter of Head:</i> distance from the most superior and inferior points of the articular surface. <i>Instrument: sliding calipers</i></br> <br><i>Humerus: Maximum Diameter at Midshaft:</i> determine midpoint from <i>maximum length</i> record measurement anterior to posterior <i>Instrutment: sliding calipers</i></br> <br><i>Humerus: Minimum Diameter at Midshaft: </i>determine midpoint from <i>maximum length</i> record measurement medial to lateral. <i>Instrument: sliding calipers</i></br> <br>Buikstra and Ubelaker (1994)</br></p>
+            <p><i>Humerus: Maximum Length:</i> most superior point on the head of the humerus to the most inferior point on the trochlea. <br><i>Instrument: osteometric board</i></br> <br><i>Humerus: Epicondular Breadth:</i> the distal end, the most laterally protruding point on the lateral epicondyle to the medially protruding point of the medial epicondule. <i>Instrument: osteometric board</i></br> <br><i>Humerus: Vertical Diameter of Head:</i> distance from the most superior and inferior points of the articular surface. <i>Instrument: sliding calipers</i></br> <br><i>Humerus: Maximum Diameter at Midshaft:</i> determine midpoint from <i>maximum length</i> record measurement anterior to posterior <i>Instrument: sliding calipers</i></br> <br><i>Humerus: Minimum Diameter at Midshaft: </i>determine midpoint from <i>maximum length</i> record measurement medial to lateral. <i>Instrument: sliding calipers</i></br> <br>Buikstra and Ubelaker (1994)</br></p>
         </div>
     </div>
 </div>
- <!-- Bootstrap JS + Popper.js -->
- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<!-- Bootstrap JS + Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<!-- Sketchfab Viewer API -->
+<script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+
+<script>
+// Initialize Sketchfab model iframe
+const iframe = document.createElement('iframe');
+iframe.src = "https://sketchfab.com/models/a1095b28cdb64a6b979dc18c7410be4b/embed";
+iframe.width = "640";
+iframe.height = "480";
+iframe.frameBorder = "0";
+document.getElementById('model-viewer').appendChild(iframe);
+
+// Initialize Sketchfab API with the iframe
+const client = new Sketchfab(iframe);
+
+let api;
+let points = []; // Store the points clicked
+let clickCount = 0;
+
+client.init('a1095b28cdb64a6b979dc18c7410be4b', {
+    success: function(apiInstance) {
+        api = apiInstance;
+        api.start();
+        api.addEventListener('viewerready', function() {
+            console.log('Viewer is ready');
+            
+            // Event listener for picking points on the model
+            api.addEventListener('mousedown', function(event) {
+                // Get the 3D coordinates of the clicked point
+                api.getCanvas().getBoundingClientRect();
+                const point = event;
+                
+                // Store the points
+                points.push(point);
+                console.log(`Click ${clickCount + 1}:`, point);
+
+                clickCount++;
+                
+                // After two points are clicked, calculate the distance
+                if (clickCount === 2) {
+                    const distance = calculateDistance(points[0], points[1]);
+                    document.getElementById('measurement-result').textContent =
+                        `Distance between points: ${distance.toFixed(2)} units`;
+                    
+                    // Reset for the next measurement
+                    points.length = 0;
+                    clickCount = 0;
+                }
+            });
+        });
+    },
+    error: function() {
+        console.log('Error initializing Sketchfab viewer');
+    }
+});
+
+// Function to calculate the distance between two points in 3D space
+function calculateDistance(point1, point2) {
+    const dx = point2[0] - point1[0];
+    const dy = point2[1] - point1[1];
+    const dz = point2[2] - point1[2];
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+}
+</script>
+
 </body>
 </html>
