@@ -56,6 +56,9 @@
                 </iframe>
             </div>
             <p id="measurement-result" style="font-size: 14px; margin-top: 10px; font-weight: bold;"></p>
+            
+            <!-- Added model viewer container to hold the measurement controls -->
+            <div id="model-viewer"></div>
         </div>
 
         <!-- Sidebar -->
@@ -123,6 +126,157 @@ function calculateDistance(point1, point2) {
     const dz = point2[2] - point1[2];
     return Math.sqrt(dx * dx + dy * dy + dz * dz);
 }
+</script>
+
+<!-- Added the measurement script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the model viewer container
+        const modelViewer = document.getElementById('model-viewer');
+        
+        // Create measurement UI elements
+        const measurementControls = document.createElement('div');
+        measurementControls.innerHTML = `
+            <div style="margin-top:15px;">
+                <strong>Manual Measurement Tool</strong>
+                <div style="margin-top:10px;">
+                    <label>Measurement Type:</label>
+                    <select id="measurement-type" style="padding:5px;margin-left:5px;">
+                        <option value="tibia-length">Tibia Length</option>
+                        <option value="proximal-breadth">Maximum Proximal Epiphyseal Breadth</option>
+                        <option value="distal-breadth">Maximum Distal Epiphyseal Breadth</option>
+                        <option value="max-diameter-foramen">Maximum Diameter at Nutrient Foramen</option>
+                        <option value="ml-diameter-foramen">Medial-Lateral Diameter at Nutrient Foramen</option>
+                        <option value="circumference-foramen">Circumference at Nutrient Foramen</option>
+                        <option value="custom">Custom Measurement</option>
+                    </select>
+                </div>
+                <div id="custom-inputs" style="margin-top:10px;display:none;">
+                    <label>Custom Value (mm):</label>
+                    <input type="number" id="custom-value" style="width:80px;padding:5px;margin-left:5px;">
+                    <button id="add-custom" style="padding:5px 10px;margin-left:5px;background:#4CAF50;color:white;border:none;border-radius:4px;">Add</button>
+                </div>
+                <div style="margin-top:15px;">
+                    <button id="simulate-measurement" style="padding:8px 16px;background:#2196F3;color:white;border:none;border-radius:4px;">Simulate Measurement</button>
+                    <button id="clear-results" style="padding:8px 16px;background:#f44336;color:white;border:none;border-radius:4px;margin-left:10px;">Clear Results</button>
+                </div>
+            </div>
+            <div id="measurement-results" style="margin-top:15px;padding:10px;border:1px solid #ddd;border-radius:4px;background:#f9f9f9;">
+                <p id="result-display" style="font-weight:bold;">Select a measurement type and click "Simulate Measurement"</p>
+                <ul id="measurement-history" style="margin-top:10px;padding-left:20px;"></ul>
+            </div>
+        `;
+        modelViewer.appendChild(measurementControls);
+        
+        // Reference values for tibia measurements (approximate average values in mm)
+        const referenceValues = {
+            'tibia-length': { min: 320, max: 380, unit: 'mm' },
+            'proximal-breadth': { min: 70, max: 85, unit: 'mm' },
+            'distal-breadth': { min: 45, max: 55, unit: 'mm' },
+            'max-diameter-foramen': { min: 30, max: 38, unit: 'mm' },
+            'ml-diameter-foramen': { min: 20, max: 25, unit: 'mm' },
+            'circumference-foramen': { min: 85, max: 100, unit: 'mm' }
+        };
+        
+        // Get UI elements
+        const measurementType = document.getElementById('measurement-type');
+        const customInputs = document.getElementById('custom-inputs');
+        const customValue = document.getElementById('custom-value');
+        const addCustomBtn = document.getElementById('add-custom');
+        const simulateBtn = document.getElementById('simulate-measurement');
+        const clearBtn = document.getElementById('clear-results');
+        const resultDisplay = document.getElementById('result-display');
+        const measurementHistory = document.getElementById('measurement-history');
+        
+        // Show/hide custom inputs based on selection
+        measurementType.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customInputs.style.display = 'block';
+            } else {
+                customInputs.style.display = 'none';
+            }
+        });
+        
+        // Simulate measurement button
+        simulateBtn.addEventListener('click', function() {
+            const type = measurementType.value;
+            
+            if (type === 'custom') {
+                if (!customValue.value) {
+                    alert('Please enter a custom value');
+                    return;
+                }
+                
+                const value = parseFloat(customValue.value);
+                addMeasurementResult('Custom Measurement', value, 'mm');
+            } else {
+                // Generate a realistic value within the reference range
+                const ref = referenceValues[type];
+                const value = simulateMeasurement(ref.min, ref.max);
+                
+                // Display result based on measurement type
+                let measurementName = '';
+                
+                switch(type) {
+                    case 'tibia-length':
+                        measurementName = 'Tibia Length';
+                        break;
+                    case 'proximal-breadth':
+                        measurementName = 'Maximum Proximal Epiphyseal Breadth';
+                        break;
+                    case 'distal-breadth':
+                        measurementName = 'Maximum Distal Epiphyseal Breadth';
+                        break;
+                    case 'max-diameter-foramen':
+                        measurementName = 'Maximum Diameter at Nutrient Foramen';
+                        break;
+                    case 'ml-diameter-foramen':
+                        measurementName = 'Medial-Lateral Diameter at Nutrient Foramen';
+                        break;
+                    case 'circumference-foramen':
+                        measurementName = 'Circumference at Nutrient Foramen';
+                        break;
+                }
+                
+                addMeasurementResult(measurementName, value, ref.unit);
+            }
+        });
+        
+        // Add custom measurement
+        addCustomBtn.addEventListener('click', function() {
+            if (!customValue.value) {
+                alert('Please enter a custom value');
+                return;
+            }
+            
+            const value = parseFloat(customValue.value);
+            addMeasurementResult('Custom Measurement', value, 'mm');
+            customValue.value = '';
+        });
+        
+        // Clear results
+        clearBtn.addEventListener('click', function() {
+            measurementHistory.innerHTML = '';
+            resultDisplay.textContent = 'Select a measurement type and click "Simulate Measurement"';
+        });
+        
+        // Helper function to simulate a measurement
+        function simulateMeasurement(min, max) {
+            // Add a small random variation to make it realistic
+            return (Math.random() * (max - min) + min).toFixed(2);
+        }
+        
+        // Helper function to add a measurement result
+        function addMeasurementResult(name, value, unit) {
+            // Update the current result display
+            resultDisplay.textContent = `${name}: ${value} ${unit}`;
+            
+            // Add to history
+            const historyItem = document.createElement('li');
+            historyItem.textContent = `${name}: ${value} ${unit}`;
+            measurementHistory.prepend(historyItem);
+        }
+    });
 </script>
 
 </body>
