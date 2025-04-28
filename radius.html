@@ -42,7 +42,7 @@
             </ul>
         </div>
     </div>
-</nav>    
+</nav>
 
 <!-- Content Layout with Sidebar -->
 <div class="container" style="padding-top: 80px;"> <!-- Add padding-top to offset the fixed navbar -->
@@ -52,7 +52,7 @@
             <h1>Radius</h1>
             <p>Below you will find the bone model. The orbit control allows you to move the bone around as if you were holding it. Clicking on two points on the bone will allow you practice measurements- you can consult measurements to the right for the exact location to take measurements.</p>
             <div class="sketchfab-embed-wrapper">
-                <iframe title="Radius" width="100%" height="600px" frameborder="0" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" allow="autoplay; fullscreen; xr-spatial-tracking" xr-spatial-tracking execution-while-out-of-viewport execution-while-not-rendered web-share src="https://sketchfab.com/models/207543660b5f46639ae9b2361af5c310/embed">
+                <iframe title="Radius" width="100%" height="600px" frameborder="0" allow="autoplay; fullscreen; accelerometer; encrypted-media; xr-spatial-tracking" allowfullscreen mozallowfullscreen="true" webkitallowfullscreen="true" src="https://sketchfab.com/models/207543660b5f46639ae9b2361af5c310/embed">
                 </iframe>
             </div>
             <p id="measurement-result" style="font-size: 14px; margin-top: 10px; font-weight: bold;"></p>
@@ -61,7 +61,15 @@
         <!-- Sidebar -->
         <div class="col-md-4 sidebar" style="background-color: #f4f4f4; padding: 20px;">
             <h3>Measurements</h3>
-            <p><i>Radius: Maximum Length</i>the most proximal point on the head of the radius to the tip of the styloid process. <i>Instrument: osteometric board</i> </br> <br><i>Radius: Anterior-Posterior Diameter at Midshaft</i> determine midshaft from <i>maximum length</i> record at midshaft the distance anterior to posterior. <i>Instrument: sliding calipers</i></br> <br><i>Radius: Medial-Lateral Diameter at Midshaft</i> determine midshaft using <i>maximum length</i> record at midshaft the distance medial to lateral. <i>Instrument: sliding calipers</i></br> <br>Buikstra and Ubelaker (1994)</br></p>
+            <p>
+                <i>Radius: Maximum Length</i> the most proximal point on the head of the radius to the tip of the styloid process. 
+                <i>Instrument: osteometric board</i><br><br>
+                <i>Radius: Anterior-Posterior Diameter at Midshaft</i> determine midshaft from <i>maximum length</i> record at midshaft the distance anterior to posterior. 
+                <i>Instrument: sliding calipers</i><br><br>
+                <i>Radius: Medial-Lateral Diameter at Midshaft</i> determine midshaft using <i>maximum length</i> record at midshaft the distance medial to lateral. 
+                <i>Instrument: sliding calipers</i><br><br>
+                Buikstra and Ubelaker (1994)
+            </p>
         </div>
     </div>
 </div>
@@ -72,58 +80,32 @@
 
 <!-- Sketchfab Viewer API -->
 <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
-
 <script>
-// Initialize Sketchfab model iframe
-const iframe = document.querySelector('iframe');
-const client = new Sketchfab(iframe);
+    // Initialize Sketchfab model iframe
+    const iframe = document.querySelector('iframe');
+    const client = new Sketchfab(iframe);
 
-let api;
-let points = [];
-let clickCount = 0;
+    let api;
+    let points = [];
+    let clickCount = 0;
 
-client.init('207543660b5f46639ae9b2361af5c310', {
-    success: function(apiInstance) {
-        api = apiInstance;
-        api.start();
-        api.addEventListener('viewerready', function() {
-            console.log('Viewer is ready');
-            
-            // Event listener for mouse clicks on the 3D model
-            api.addEventListener('mousedown', function(event) {
-                // Get the 3D coordinates of the clicked point
-                const point = event;
-                console.log(`Click ${clickCount + 1}:`, point);
-                
-                points.push(point);
-                clickCount++;
-                
-                // After two points are clicked, calculate the distance
-                if (clickCount === 2) {
-                    const distance = calculateDistance(points[0], points[1]);
-                    document.getElementById('measurement-result').textContent =
-                        `Distance between points: ${distance.toFixed(2)} units`;
+    client.init('207543660b5f46639ae9b2361af5c310', {
+        success: function(apiInstance) {
+            api = apiInstance;
+            api.start();
+            api.addEventListener('viewerready', function() {
+                console.log('Viewer is ready');
 
-                    // Reset for the next measurement
-                    points.length = 0;
-                    clickCount = 0;
-                }
+                // Add click functionality (Note: Sketchfab API does not support picking directly in this setup)
+                api.addEventListener('sceneClick', function(event) {
+                    console.log('Click detected:', event);
+                });
             });
-        });
-    },
-    error: function() {
-        console.log('Error initializing Sketchfab viewer');
-    }
-});
-
-// Function to calculate the distance between two points in 3D space
-function calculateDistance(point1, point2) {
-    const dx = point2[0] - point1[0];
-    const dy = point2[1] - point1[1];
-    const dz = point2[2] - point1[2];
-    return Math.sqrt(dx * dx + dy * dy + dz * dz);
-}
+        },
+        error: function() {
+            console.error('Error initializing Sketchfab viewer');
+        }
+    });
 </script>
-
 </body>
 </html>
